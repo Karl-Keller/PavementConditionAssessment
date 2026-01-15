@@ -1,0 +1,62 @@
+classDiagram
+    class DistressType {
+        +int id
+        +str name
+        +str unit
+        +bool has_severity
+        +get_density(quantity, sample_area) float
+    }
+
+    class DistressObservation {
+        +DistressType distress_type
+        +Severity severity
+        +float quantity
+        +float density
+        +float deduct_value
+    }
+
+    class DeductCurve {
+        +int distress_id
+        +Severity severity
+        +List~Tuple~ points
+        +interpolate(density) float
+    }
+
+    class CDVCurve {
+        +int q_value
+        +List~Tuple~ points
+        +interpolate(tdv) float
+    }
+
+    class SampleUnit {
+        +str id
+        +float area
+        +List~DistressObservation~ observations
+        +calculate_pci() float
+    }
+
+    class PCICalculator {
+        +Dict deduct_curves
+        +Dict cdv_curves
+        +get_deduct_value(distress_id, severity, density) float
+        +get_cdv(tdv, q) float
+        +calculate_sample_pci(observations, sample_area) float
+        +calculate_section_pci(sample_units) float
+    }
+
+    class PavementSection {
+        +str id
+        +float total_area
+        +List~SampleUnit~ sample_units
+        +float pci
+        +str rating
+    }
+
+    DistressType "1" -- "*" DistressObservation
+    DeductCurve "1" -- "1" DistressType
+    SampleUnit "1" -- "*" DistressObservation
+    PavementSection "1" -- "*" SampleUnit
+    PCICalculator "1" -- "*" DeductCurve
+    PCICalculator "1" -- "*" CDVCurve
+    PCICalculator ..> SampleUnit : calculates
+    PCICalculator ..> PavementSection : calculates

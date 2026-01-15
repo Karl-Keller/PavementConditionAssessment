@@ -1,0 +1,21 @@
+stateDiagram-v2
+    [*] --> Initialize: DVs from all distresses
+    
+    Initialize --> CountQ: Sort DVs descending
+    
+    CountQ --> CalculateTDV: q = count(DV > 2)
+    
+    CalculateTDV --> LookupCDV: TDV = Σ DVs
+    
+    LookupCDV --> StoreCDV: CDV = f(TDV, q)
+    
+    StoreCDV --> CheckQ: Store CDV value
+    
+    CheckQ --> ReduceLowest: q > 1
+    CheckQ --> FindMax: q = 1
+    
+    ReduceLowest --> DecrementQ: Set lowest DV>2 to 2.0
+    
+    DecrementQ --> CalculateTDV: q = q - 1
+    
+    FindMax --> [*]: Return max(all CDVs)

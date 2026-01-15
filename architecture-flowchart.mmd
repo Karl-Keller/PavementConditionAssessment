@@ -1,0 +1,80 @@
+flowchart TD
+    subgraph Input["Input Data"]
+        A[Sample Unit Definition<br/>area, location] 
+        B[Distress Observations<br/>type, severity, quantity]
+    end
+
+    subgraph DensityCalc["Step 1: Density Calculation"]
+        C{Distress<br/>Unit Type?}
+        D[Area-based<br/>density = area/sample_area × 100]
+        E[Linear<br/>density = length/sample_area × 100]
+        F[Count<br/>density = count/sample_area × 100]
+    end
+
+    subgraph DeductLookup["Step 2: Deduct Value Lookup"]
+        G[Select Curve<br/>by distress type + severity]
+        H[(Deduct Value<br/>Curves<br/>~57 curves)]
+        I[Interpolate<br/>density → deduct value]
+        J[List of Deduct Values<br/>DV₁, DV₂, ... DVₙ]
+    end
+
+    subgraph CDVCalc["Step 3: CDV Iteration"]
+        K[Sort DVs descending<br/>Count q = DVs > 2.0]
+        L[Calculate TDV = Σ DVs]
+        M[Lookup CDV<br/>from q-curve]
+        N[(CDV Curves<br/>q = 1 to 7)]
+        O{q > 1?}
+        P[Replace lowest DV > 2<br/>with 2.0]
+        Q[Decrement q]
+        R[Store CDV]
+        S[max CDV from<br/>all iterations]
+    end
+
+    subgraph Output["Step 4: Final PCI"]
+        T[PCI = 100 - max CDV]
+        U{PCI Rating}
+        V[Good: 85-100]
+        W[Satisfactory: 70-85]
+        X[Fair: 55-70]
+        Y[Poor: 40-55]
+        Z[Very Poor: 25-40]
+        AA[Serious: 10-25]
+        AB[Failed: 0-10]
+    end
+
+    A --> C
+    B --> C
+    C -->|sq ft| D
+    C -->|linear ft| E
+    C -->|count| F
+    D --> G
+    E --> G
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    J --> K
+    K --> L
+    L --> M
+    M --> N
+    N --> R
+    R --> O
+    O -->|Yes| P
+    P --> Q
+    Q --> L
+    O -->|No| S
+    S --> T
+    T --> U
+    U --> V
+    U --> W
+    U --> X
+    U --> Y
+    U --> Z
+    U --> AA
+    U --> AB
+
+    style Input fill:#e1f5fe
+    style DensityCalc fill:#fff3e0
+    style DeductLookup fill:#f3e5f5
+    style CDVCalc fill:#e8f5e9
+    style Output fill:#fce4ec

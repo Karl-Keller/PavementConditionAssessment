@@ -115,6 +115,33 @@ pci_calculator/
 - [ ] Network-level aggregation
 - [ ] Validation against known PAVER outputs
 
+## Current Scope & Future Enhancements
+
+### Current Focus
+
+This implementation targets **asphalt (AC) pavements** per ASTM D6433, covering the 19 distress types listed above. The calculation engine handles:
+
+- Single sample unit PCI calculation
+- Density calculation for area, linear, and count-based distresses
+- Deduct value interpolation from distress-specific curves
+- Iterative CDV calculation with q-curve correction
+
+### Not Yet Implemented
+
+| Feature | Notes |
+|---------|-------|
+| **Concrete (PCC) pavements** | Requires separate distress catalog (~15 types) and curve set |
+| **Section-level PCI rollup** | Weighted averaging across multiple sample units |
+| **Random vs. additional sample weighting** | ASTM specifies different treatment for additional samples |
+| **Survey metadata** | Date, inspector ID, branch/network ID for historical tracking |
+| **Condition projection** | Deterioration modeling based on historical PCI trends |
+
+### Roadmap
+
+1. Complete AC implementation with full curve coverage
+2. Add section-level aggregation and sample weighting
+3. Evaluate PCC pavement support based on user demand
+
 ## Legal Note
 
 The deduct value curves and CDV curves are copyrighted by ASTM International. To complete this implementation, you must:

@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant User
+    participant Calculator as PCICalculator
+    participant Curves as DeductCurves
+    participant CDV as CDVCurves
+
+    User->>Calculator: calculate_pci(sample_unit)
+    
+    loop For each distress observation
+        Calculator->>Calculator: calculate_density()
+        Calculator->>Curves: get_deduct_value(type, severity, density)
+        Curves-->>Calculator: deduct_value
+    end
+
+    Calculator->>Calculator: sort DVs, count q
+    
+    loop While q >= 1
+        Calculator->>Calculator: TDV = sum(DVs)
+        Calculator->>CDV: get_cdv(TDV, q)
+        CDV-->>Calculator: cdv
+        Calculator->>Calculator: store cdv
+        Calculator->>Calculator: replace lowest DV>2 with 2
+        Calculator->>Calculator: q = q - 1
+    end
+
+    Calculator->>Calculator: PCI = 100 - max(cdvs)
+    Calculator-->>User: PCI value + rating
