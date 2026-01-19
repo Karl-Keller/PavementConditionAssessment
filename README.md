@@ -106,12 +106,13 @@ pci_calculator/
 
 ## Implementation Status
 
-- [ ] Distress type catalog with units and severity levels
-- [ ] Curve interpolation utilities
-- [ ] Deduct value curves (requires ASTM D6433 document)
-- [ ] CDV curves (requires ASTM D6433 document)
-- [ ] Core PCI calculation algorithm
-- [ ] Sample unit handling
+- [x] Distress type catalog with units and severity levels
+- [x] Curve interpolation utilities
+- [ ] Deduct value curves (placeholder only — requires ASTM D6433 document)
+- [ ] CDV curves (placeholder only — requires ASTM D6433 document)
+- [x] Core PCI calculation algorithm
+- [x] Sample unit handling
+- [x] Section-level PCI rollup (area-weighted)
 - [ ] Network-level aggregation
 - [ ] Validation against known PAVER outputs
 
@@ -125,21 +126,31 @@ This implementation targets **asphalt (AC) pavements** per ASTM D6433, covering 
 - Density calculation for area, linear, and count-based distresses
 - Deduct value interpolation from distress-specific curves
 - Iterative CDV calculation with q-curve correction
+- Section-level PCI rollup via area-weighted averaging
 
-### Not Yet Implemented
+### Not Yet Implemented (ASTM D6433)
 
 | Feature | Notes |
 |---------|-------|
 | **Concrete (PCC) pavements** | Requires separate distress catalog (~15 types) and curve set |
-| **Section-level PCI rollup** | Weighted averaging across multiple sample units |
 | **Random vs. additional sample weighting** | ASTM specifies different treatment for additional samples |
+| **Network-level aggregation** | Rolling up section PCIs to network/branch level |
 | **Survey metadata** | Date, inspector ID, branch/network ID for historical tracking |
+
+### Beyond ASTM D6433
+
+The following features are outside the scope of the ASTM standard but common in pavement management systems:
+
+| Feature | Notes |
+|---------|-------|
 | **Condition projection** | Deterioration modeling based on historical PCI trends |
+| **Maintenance recommendation** | M&R treatment selection based on distress types and PCI |
+| **Budget optimization** | Multi-year planning with funding constraints |
 
 ### Roadmap
 
 1. Complete AC implementation with full curve coverage
-2. Add section-level aggregation and sample weighting
+2. Add network-level aggregation and sample weighting
 3. Evaluate PCC pavement support based on user demand
 
 ## Legal Note
